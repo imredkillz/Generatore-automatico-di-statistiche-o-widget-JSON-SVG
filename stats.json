@@ -1,0 +1,17 @@
+{
+  "updated": "2026-11-21",
+  "items": [
+    {
+      "key": "github",
+      "label": "GITHUB",
+      "color": "#58a6ff",
+      "value": "3 repos · 1 followers",
+      "primary": "3 repos",
+      "secondary": "1 followers · @imredkillz",
+      "raw": {
+        "repos": 3,
+        "followers": 1
+      }
+    }
+  ]
+}
