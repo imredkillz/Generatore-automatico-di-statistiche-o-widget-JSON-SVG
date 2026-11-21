@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - "config.json"
+      - ".github/workflows/update.yml"
   workflow_dispatch:
 
 permissions:
@@ -28,7 +29,7 @@ jobs:
           LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         run: node generate.mjs
 
-            - name: Commit automatico se ci sono modifiche
+      - name: Commit automatico se ci sono modifiche
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
