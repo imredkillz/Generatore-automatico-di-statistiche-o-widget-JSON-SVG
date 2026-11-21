@@ -1,0 +1,36 @@
+name: Update Stats Dashboard
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  push:
+    paths:
+      - "config.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Genera JSON e SVG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        run: node generate.mjs
+
+            - name: Commit automatico se ci sono modifiche
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add *.svg stats.json
+          git diff --staged --quiet || (git commit -m "chore: update stats" && git push)
