@@ -1,0 +1,1 @@
+# Generatore-automatico-di-statistiche-o-widget-JSON-SVG
