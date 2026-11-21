@@ -4,3 +4,7 @@
   <img src="./steam.svg" alt="Steam" width="290" />
   <img src="./music.svg" alt="Music" width="290" />
 </p>
+
+<p align="left">
+  <img src="https://raw.githubusercontent.com/TUO_USER/TUA_REPO/main/github.svg" alt="GitHub" width="290" />
+</p>
