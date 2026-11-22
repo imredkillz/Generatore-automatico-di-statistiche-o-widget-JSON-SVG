@@ -1,5 +1,46 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
+const THEMES = {
+  electric: {
+    bgStart: '#111622',
+    bgEnd: '#090c12',
+    headerLeft: '#38bdf8',
+    headerRight: '#a855f7',
+    github: '#38bdf8',
+    discord: '#818cf8',
+    focus: '#e879f9',
+    discogs: '#fbbf24',
+    music: '#34d399',
+    accent: '#38bdf8'
+  },
+  crimson: {
+    bgStart: '#141116',
+    bgEnd: '#09090c',
+    headerLeft: '#ff3b5c',
+    headerRight: '#f97316',
+    github: '#e2e8f0',
+    discord: '#a78bfa',
+    focus: '#ff3b5c',
+    discogs: '#fb923c',
+    music: '#2dd4bf',
+    accent: '#ff3b5c'
+  },
+  tokyo: {
+    bgStart: '#16161e',
+    bgEnd: '#0f0f14',
+    headerLeft: '#7aa2f7',
+    headerRight: '#bb9af7',
+    github: '#7dcfff',
+    discord: '#bb9af7',
+    focus: '#f7768e',
+    discogs: '#e0af68',
+    music: '#9ece6a',
+    accent: '#7aa2f7'
+  }
+};
+
+const DEFAULT_THEME = 'tokyo';
+
 const esc = (s) => String(s ?? '')
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
@@ -20,7 +61,7 @@ async function getJson(url, headers = {}) {
 }
 
 const sources = [
-  async (cfg) => {
+  async (cfg, theme) => {
     if (!cfg.github) {
       console.log('[GITHUB] Saltato: campo "github" vuoto in config.json');
       return null;
@@ -35,7 +76,7 @@ const sources = [
     return {
       key: 'github',
       label: 'GITHUB',
-      color: '#58a6ff',
+      color: theme.github,
       meta: '↗',
       value: `${d.public_repos} ${repoLabel} · ${d.followers} ${followerLabel}`,
       primary: `${d.public_repos} ${repoLabel}`,
@@ -44,7 +85,7 @@ const sources = [
     };
   },
 
-  async (cfg) => {
+  async (cfg, theme) => {
     if (!cfg.discordUsername) {
       console.log('[DISCORD] Saltato: campo "discordUsername" vuoto in config.json');
       return null;
@@ -56,7 +97,7 @@ const sources = [
     return {
       key: 'discord',
       label: 'DISCORD',
-      color: '#5865f2',
+      color: theme.discord,
       meta: '↗',
       value: handle,
       primary: cut(handle, 28),
@@ -65,7 +106,7 @@ const sources = [
     };
   },
 
-  async (cfg) => {
+  async (cfg, theme) => {
     if (!cfg.focusPrimary) {
       console.log('[FOCUS] Saltato: campo "focusPrimary" vuoto in config.json');
       return null;
@@ -77,7 +118,7 @@ const sources = [
     return {
       key: 'focus',
       label,
-      color: '#a371f7',
+      color: theme.focus,
       meta: '',
       value: cut(cfg.focusSecondary ? `${primary} · ${cfg.focusSecondary}` : primary, 36),
       primary: cut(primary, 28),
@@ -86,7 +127,7 @@ const sources = [
     };
   },
 
-  async (cfg) => {
+  async (cfg, theme) => {
     if (!cfg.discogs) {
       console.log('[DISCOGS] Saltato: campo "discogs" vuoto in config.json');
       return null;
@@ -99,7 +140,7 @@ const sources = [
     return {
       key: 'discogs',
       label: 'DISCOGS',
-      color: '#f59e0b',
+      color: theme.discogs,
       meta: '↗',
       value: `${d.count} ${recordLabel} in collection`,
       primary: `${d.count} ${recordLabel}`,
@@ -108,7 +149,7 @@ const sources = [
     };
   },
 
-  async (cfg) => {
+  async (cfg, theme) => {
     const key = process.env.LASTFM_API_KEY;
     if (!cfg.lastfm) {
       console.log('[MUSIC] Saltato: campo "lastfm" vuoto in config.json');
@@ -130,9 +171,9 @@ const sources = [
     return {
       key: 'music',
       label: 'MUSIC',
-      color: '#1db954',
+      color: theme.music,
       meta: t ? (isPlaying ? 'NOW PLAYING' : 'RECENT') : '',
-      metaColor: isPlaying ? '#1db954' : '#6e7681',
+      metaColor: isPlaying ? theme.music : '#6e7681',
       pulse: Boolean(t),
       value: cut(trackText, 36),
       primary: t ? cut(track, 28) : 'No recent tracks',
@@ -142,7 +183,7 @@ const sources = [
   }
 ];
 
-function renderHeaderSVG(cfg) {
+function renderHeaderSVG(cfg, theme) {
   const width = 724;
   const height = 62;
   const title = cfg.headerTitle || cfg.github || 'dev';
@@ -153,13 +194,22 @@ function renderHeaderSVG(cfg) {
     <clipPath id="clip-header">
       <rect width="${width}" height="${height}" rx="12"/>
     </clipPath>
-    <radialGradient id="glow-header" cx="6%" cy="50%" r="45%">
-      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    <linearGradient id="bg-header" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${theme.bgStart}"/>
+      <stop offset="100%" stop-color="${theme.bgEnd}"/>
+    </linearGradient>
+    <radialGradient id="glow-header-l" cx="8%" cy="50%" r="48%">
+      <stop offset="0%" stop-color="${theme.headerLeft}" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="${theme.headerLeft}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="border-header" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    <radialGradient id="glow-header-r" cx="94%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="${theme.headerRight}" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="${theme.headerRight}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="border-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="${theme.headerLeft}" stop-opacity="0.55"/>
+      <stop offset="50%" stop-color="#30363d" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="${theme.headerRight}" stop-opacity="0.45"/>
     </linearGradient>
   </defs>
   <style>
@@ -171,16 +221,43 @@ function renderHeaderSVG(cfg) {
     .cursor { animation: blink 1.1s step-end infinite; }
   </style>
   <g clip-path="url(#clip-header)">
-    <rect width="${width}" height="${height}" fill="#0d1117"/>
-    <rect width="${width}" height="${height}" fill="url(#glow-header)"/>
+    <rect width="${width}" height="${height}" fill="url(#bg-header)"/>
+    <rect width="${width}" height="${height}" fill="url(#glow-header-l)"/>
+    <rect width="${width}" height="${height}" fill="url(#glow-header-r)"/>
   </g>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="11.5" fill="none" stroke="url(#border-header)" stroke-width="1"/>
-  <text x="22" y="36" fill="#e6edf3" font-size="16" font-weight="700" letter-spacing="0.3"><tspan fill="#58a6ff">&gt; </tspan>${esc(title)}<tspan class="cursor" fill="#58a6ff">_</tspan></text>
-  <text x="${width - 22}" y="35" text-anchor="end" fill="#8b949e" font-size="12" letter-spacing="0.8">${esc(bio)}</text>
+  <text x="22" y="36" fill="#f8fafc" font-size="16" font-weight="700" letter-spacing="0.3"><tspan fill="${theme.headerLeft}">&gt; </tspan>${esc(title)}<tspan class="cursor" fill="${theme.headerLeft}">_</tspan></text>
+  <text x="${width - 22}" y="35" text-anchor="end" fill="#94a3b8" font-size="12" letter-spacing="0.8">${esc(bio)}</text>
 </svg>`;
 }
 
-function renderDashboardSVG(title, updated, rows) {
+function renderFooterSVG(updated, theme) {
+  const width = 724;
+  const height = 40;
+
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-footer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${theme.bgStart}"/>
+      <stop offset="100%" stop-color="${theme.bgEnd}"/>
+    </linearGradient>
+    <linearGradient id="border-footer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="${theme.headerLeft}" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#30363d" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="${theme.headerRight}" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+  <rect width="${width}" height="${height}" rx="10" fill="url(#bg-footer)"/>
+  <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="9.5" fill="none" stroke="url(#border-footer)" stroke-width="1"/>
+  <text x="20" y="24" fill="#64748b" font-size="10.5" letter-spacing="0.4">auto-updated via github actions</text>
+  <text x="${width - 20}" y="24" text-anchor="end" fill="#94a3b8" font-size="10.5" letter-spacing="0.4"><tspan fill="${theme.accent}">● </tspan>${esc(updated)}</text>
+</svg>`;
+}
+
+function renderDashboardSVG(title, updated, rows, theme) {
   const width = 480;
   const rowHeight = 36;
   const height = 56 + rows.length * rowHeight + 12;
@@ -189,8 +266,8 @@ function renderDashboardSVG(title, updated, rows) {
     const y = 74 + i * rowHeight;
     return `
       <circle cx="24" cy="${y - 4}" r="3.5" fill="${r.color}"/>
-      <text x="38" y="${y}" fill="#8b949e" font-size="11" letter-spacing="1">${esc(r.label)}</text>
-      <text x="${width - 20}" y="${y}" text-anchor="end" fill="#e6edf3" font-size="12.5" font-weight="600">${esc(r.value)}</text>
+      <text x="38" y="${y}" fill="#94a3b8" font-size="11" letter-spacing="1">${esc(r.label)}</text>
+      <text x="${width - 20}" y="${y}" text-anchor="end" fill="#f8fafc" font-size="12.5" font-weight="600">${esc(r.value)}</text>
     `;
   }).join('');
 
@@ -198,15 +275,15 @@ function renderDashboardSVG(title, updated, rows) {
   <style>
     text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   </style>
-  <rect width="${width}" height="${height}" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
-  <text x="20" y="31" fill="#e6edf3" font-size="13" font-weight="700" letter-spacing="0.5">${esc(title)}</text>
-  <text x="${width - 20}" y="31" text-anchor="end" fill="#6e7681" font-size="10">${esc(updated)}</text>
-  <line x1="20" y1="45" x2="${width - 20}" y2="45" stroke="#21262d" stroke-width="1"/>
+  <rect width="${width}" height="${height}" rx="12" fill="${theme.bgEnd}" stroke="#30363d" stroke-width="1"/>
+  <text x="20" y="31" fill="#f8fafc" font-size="13" font-weight="700" letter-spacing="0.5">${esc(title)}</text>
+  <text x="${width - 20}" y="31" text-anchor="end" fill="#64748b" font-size="10">${esc(updated)}</text>
+  <line x1="20" y1="45" x2="${width - 20}" y2="45" stroke="#1e293b" stroke-width="1"/>
   ${content}
 </svg>`;
 }
 
-function renderCardSVG(item) {
+function renderCardSVG(item, theme) {
   const width = 360;
   const height = 100;
   const isArrow = item.meta === '↗';
@@ -214,18 +291,21 @@ function renderCardSVG(item) {
   const pulseCss = item.pulse
     ? `
     @keyframes pulse {
-      0%, 100% { opacity: 0.12; }
-      50% { opacity: 0.42; }
+      0%, 100% { opacity: 0.16; }
+      50% { opacity: 0.5; }
     }
-    .pulse { animation: pulse 2.4s ease-in-out infinite; }`
+    .pulse { animation: pulse 2.2s ease-in-out infinite; }`
     : '';
 
-  const pulseRing = item.pulse
-    ? `<circle cx="22" cy="24" r="7.5" fill="${item.color}" class="pulse"/>`
-    : '';
+  const dotHalo = item.pulse
+    ? `<circle cx="22" cy="24" r="8" fill="${item.color}" class="pulse"/>`
+    : `<circle cx="22" cy="24" r="6.5" fill="${item.color}" opacity="0.2"/>`;
+
+  const metaFill = isArrow ? item.color : (item.metaColor || '#64748b');
+  const metaOpacity = isArrow ? '0.8' : '1';
 
   const metaEl = item.meta
-    ? `<text x="${width - 20}" y="28" text-anchor="end" fill="${item.metaColor || '#6e7681'}" font-size="${isArrow ? '12' : '9.5'}" font-weight="600" letter-spacing="${isArrow ? '0' : '0.8'}">${esc(item.meta)}</text>`
+    ? `<text x="${width - 20}" y="28" text-anchor="end" fill="${metaFill}" opacity="${metaOpacity}" font-size="${isArrow ? '12.5' : '9.5'}" font-weight="600" letter-spacing="${isArrow ? '0' : '0.8'}">${esc(item.meta)}</text>`
     : '';
 
   return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
@@ -233,35 +313,42 @@ function renderCardSVG(item) {
     <clipPath id="clip-${item.key}">
       <rect width="${width}" height="${height}" rx="12"/>
     </clipPath>
-    <radialGradient id="glow-${item.key}" cx="10%" cy="12%" r="60%">
-      <stop offset="0%" stop-color="${item.color}" stop-opacity="0.11"/>
+    <linearGradient id="bg-${item.key}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${theme.bgStart}"/>
+      <stop offset="100%" stop-color="${theme.bgEnd}"/>
+    </linearGradient>
+    <radialGradient id="glow-${item.key}" cx="10%" cy="10%" r="72%">
+      <stop offset="0%" stop-color="${item.color}" stop-opacity="0.22"/>
+      <stop offset="55%" stop-color="${item.color}" stop-opacity="0.05"/>
       <stop offset="100%" stop-color="${item.color}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="border-${item.key}" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    <linearGradient id="border-${item.key}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${item.color}" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#30363d" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#1e242c" stop-opacity="0.85"/>
     </linearGradient>
   </defs>
   <style>
     text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }${pulseCss}
   </style>
   <g clip-path="url(#clip-${item.key})">
-    <rect width="${width}" height="${height}" fill="#0d1117"/>
+    <rect width="${width}" height="${height}" fill="url(#bg-${item.key})"/>
     <rect width="${width}" height="${height}" fill="url(#glow-${item.key})"/>
   </g>
   <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="11.5" fill="none" stroke="url(#border-${item.key})" stroke-width="1"/>
-  ${pulseRing}
+  ${dotHalo}
   <circle cx="22" cy="24" r="3.5" fill="${item.color}"/>
-  <text x="36" y="28" fill="#8b949e" font-size="10.5" font-weight="600" letter-spacing="1.2">${esc(item.label)}</text>
+  <text x="36" y="28" fill="#94a3b8" font-size="10.5" font-weight="600" letter-spacing="1.2">${esc(item.label)}</text>
   ${metaEl}
-  <text x="20" y="60" fill="#e6edf3" font-size="16.5" font-weight="700">${esc(item.primary)}</text>
-  <text x="20" y="81" fill="#8b949e" font-size="11.5">${esc(item.secondary)}</text>
+  <text x="20" y="60" fill="#f8fafc" font-size="16.5" font-weight="700">${esc(item.primary)}</text>
+  <text x="20" y="81" fill="#94a3b8" font-size="11.5">${esc(item.secondary)}</text>
 </svg>`;
 }
 
 async function main() {
   const cfg = JSON.parse(await readFile('config.json', 'utf8'));
-  const results = await Promise.allSettled(sources.map((fn) => fn(cfg)));
+  const theme = THEMES[cfg.theme] || THEMES[DEFAULT_THEME];
+  const results = await Promise.allSettled(sources.map((fn) => fn(cfg, theme)));
 
   const rows = [];
   for (const r of results) {
@@ -273,9 +360,10 @@ async function main() {
 
   await Promise.all([
     writeFile('stats.json', JSON.stringify({ updated, items: rows }, null, 2)),
-    writeFile('stats.svg', renderDashboardSVG(cfg.title || 'STATS', updated, rows)),
-    writeFile('header.svg', renderHeaderSVG(cfg)),
-    ...rows.map((r) => writeFile(`${r.key}.svg`, renderCardSVG(r)))
+    writeFile('stats.svg', renderDashboardSVG(cfg.title || 'STATS', updated, rows, theme)),
+    writeFile('header.svg', renderHeaderSVG(cfg, theme)),
+    writeFile('footer.svg', renderFooterSVG(updated, theme)),
+    ...rows.map((r) => writeFile(`${r.key}.svg`, renderCardSVG(r, theme)))
   ]);
 }
 
