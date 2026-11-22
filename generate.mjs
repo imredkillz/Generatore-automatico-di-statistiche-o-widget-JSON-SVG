@@ -62,6 +62,26 @@ const sources = [
   },
 
   async (cfg) => {
+    if (!cfg.focusPrimary) {
+      console.log('[FOCUS] Saltato: campo "focusPrimary" vuoto in config.json');
+      return null;
+    }
+    const label = (cfg.focusLabel || 'FOCUS').toUpperCase();
+    const primary = cfg.focusPrimary;
+    const secondary = cfg.focusSecondary || 'Stack & focus attuale';
+    console.log('[FOCUS] OK');
+    return {
+      key: 'focus',
+      label,
+      color: '#a371f7',
+      value: cut(cfg.focusSecondary ? `${primary} · ${cfg.focusSecondary}` : primary, 36),
+      primary: cut(primary, 23),
+      secondary: cut(secondary, 34),
+      raw: { label, primary, secondary }
+    };
+  },
+
+  async (cfg) => {
     if (!cfg.discogs) {
       console.log('[DISCOGS] Saltato: campo "discogs" vuoto in config.json');
       return null;
@@ -78,33 +98,6 @@ const sources = [
       primary: `${d.count} dischi`,
       secondary: `collezione · @${cfg.discogs}`,
       raw: { count: d.count }
-    };
-  },
-
-  async (cfg) => {
-    const key = process.env.STEAM_API_KEY;
-    if (!cfg.steamId) {
-      console.log('[STEAM] Saltato: campo "steamId" vuoto in config.json');
-      return null;
-    }
-    if (!key) {
-      console.log('[STEAM] Saltato: manca il Secret STEAM_API_KEY in GitHub');
-      return null;
-    }
-    const d = await getJson(
-      `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${key}&steamid=${cfg.steamId}&count=1`
-    );
-    const game = d.response?.games?.[0];
-    const hours = game ? (game.playtime_2weeks / 60).toFixed(1) : '0.0';
-    console.log('[STEAM] OK');
-    return {
-      key: 'steam',
-      label: 'STEAM',
-      color: '#66c0f4',
-      value: game ? `${cut(game.name, 24)} · ${hours}h` : 'Nessun gioco recente',
-      primary: game ? cut(game.name, 23) : 'Nessun gioco',
-      secondary: game ? `${hours}h nelle ultime 2 settimane` : 'Nessuna attività recente',
-      raw: game ? { game: game.name, hours2Weeks: Number(hours) } : null
     };
   },
 
