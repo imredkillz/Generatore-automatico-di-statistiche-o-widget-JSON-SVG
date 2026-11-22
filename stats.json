@@ -23,6 +23,18 @@
       "raw": {
         "username": "@accanito"
       }
+    },
+    {
+      "key": "music",
+      "label": "MUSIC",
+      "color": "#1db954",
+      "value": "NXGHT! — ESPAÇO LIMINAL",
+      "primary": "ESPAÇO LIMINAL",
+      "secondary": "NXGHT!",
+      "raw": {
+        "artist": "NXGHT!",
+        "track": "ESPAÇO LIMINAL"
+      }
     }
   ]
 }
