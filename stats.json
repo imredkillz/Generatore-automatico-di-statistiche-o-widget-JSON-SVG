@@ -4,7 +4,7 @@
     {
       "key": "github",
       "label": "GITHUB",
-      "color": "#58a6ff",
+      "color": "#0d1117",
       "value": "3 repos · 1 followers",
       "primary": "3 repos",
       "secondary": "1 followers · @imredkillz",
@@ -16,7 +16,7 @@
     {
       "key": "discord",
       "label": "DISCORD",
-      "color": "#5865f2",
+      "color": "#0d1117",
       "value": "@accanito",
       "primary": "@accanito",
       "secondary": "Scrivimi su Discord",
@@ -26,8 +26,8 @@
     },
     {
       "key": "focus",
-      "label": "NOW",
-      "color": "#a371f7",
+      "label": "STACK",
+      "color": "#0d1117",
       "value": "TypeScript · JavaScript · Web Devel…",
       "primary": "TypeScript · JavaScript",
       "secondary": "Web Developer",
@@ -39,8 +39,8 @@
     },
     {
       "key": "music",
-      "label": "MUSIC",
-      "color": "#1db954",
+      "label": "LIVE",
+      "color": "#0d1117",
       "value": "Travis Scott — WHERE WAS YOU",
       "primary": "WHERE WAS YOU",
       "secondary": "Travis Scott",
