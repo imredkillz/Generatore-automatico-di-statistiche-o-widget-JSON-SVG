@@ -1,0 +1,20 @@
+<svg width="724" height="40" viewBox="0 0 724 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-footer" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16161e"/>
+      <stop offset="100%" stop-color="#0f0f14"/>
+    </linearGradient>
+    <linearGradient id="border-footer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7aa2f7" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#30363d" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#bb9af7" stop-opacity="0.35"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+  <rect width="724" height="40" rx="10" fill="url(#bg-footer)"/>
+  <rect x="0.5" y="0.5" width="723" height="39" rx="9.5" fill="none" stroke="url(#border-footer)" stroke-width="1"/>
+  <text x="20" y="24" fill="#64748b" font-size="10.5" letter-spacing="0.4">auto-updated via github actions</text>
+  <text x="704" y="24" text-anchor="end" fill="#94a3b8" font-size="10.5" letter-spacing="0.4"><tspan fill="#7aa2f7">● </tspan>2026-11-22</text>
+</svg>

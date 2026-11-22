@@ -4,7 +4,7 @@
     {
       "key": "github",
       "label": "GITHUB",
-      "color": "#58a6ff",
+      "color": "#7dcfff",
       "meta": "↗",
       "value": "3 repos · 1 follower",
       "primary": "3 repos",
@@ -17,7 +17,7 @@
     {
       "key": "discord",
       "label": "DISCORD",
-      "color": "#5865f2",
+      "color": "#bb9af7",
       "meta": "↗",
       "value": "@accanito",
       "primary": "@accanito",
@@ -29,7 +29,7 @@
     {
       "key": "focus",
       "label": "NOW",
-      "color": "#a371f7",
+      "color": "#f7768e",
       "meta": "",
       "value": "TypeScript · JavaScript · Web Devel…",
       "primary": "TypeScript · JavaScript",
@@ -43,16 +43,16 @@
     {
       "key": "music",
       "label": "MUSIC",
-      "color": "#1db954",
+      "color": "#9ece6a",
       "meta": "NOW PLAYING",
-      "metaColor": "#1db954",
+      "metaColor": "#9ece6a",
       "pulse": true,
-      "value": "Ken Carson — Catastrophe",
-      "primary": "Catastrophe",
-      "secondary": "Ken Carson",
+      "value": "21 Savage — WHERE YOU FROM",
+      "primary": "WHERE YOU FROM",
+      "secondary": "21 Savage",
       "raw": {
-        "artist": "Ken Carson",
-        "track": "Catastrophe",
+        "artist": "21 Savage",
+        "track": "WHERE YOU FROM",
         "nowPlaying": true
       }
     }

@@ -3,13 +3,22 @@
     <clipPath id="clip-header">
       <rect width="724" height="62" rx="12"/>
     </clipPath>
-    <radialGradient id="glow-header" cx="6%" cy="50%" r="45%">
-      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.09"/>
-      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    <linearGradient id="bg-header" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16161e"/>
+      <stop offset="100%" stop-color="#0f0f14"/>
+    </linearGradient>
+    <radialGradient id="glow-header-l" cx="8%" cy="50%" r="48%">
+      <stop offset="0%" stop-color="#7aa2f7" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#7aa2f7" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="border-header" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    <radialGradient id="glow-header-r" cx="94%" cy="50%" r="42%">
+      <stop offset="0%" stop-color="#bb9af7" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#bb9af7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="border-header" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7aa2f7" stop-opacity="0.55"/>
+      <stop offset="50%" stop-color="#30363d" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#bb9af7" stop-opacity="0.45"/>
     </linearGradient>
   </defs>
   <style>
@@ -21,10 +30,11 @@
     .cursor { animation: blink 1.1s step-end infinite; }
   </style>
   <g clip-path="url(#clip-header)">
-    <rect width="724" height="62" fill="#0d1117"/>
-    <rect width="724" height="62" fill="url(#glow-header)"/>
+    <rect width="724" height="62" fill="url(#bg-header)"/>
+    <rect width="724" height="62" fill="url(#glow-header-l)"/>
+    <rect width="724" height="62" fill="url(#glow-header-r)"/>
   </g>
   <rect x="0.5" y="0.5" width="723" height="61" rx="11.5" fill="none" stroke="url(#border-header)" stroke-width="1"/>
-  <text x="22" y="36" fill="#e6edf3" font-size="16" font-weight="700" letter-spacing="0.3"><tspan fill="#58a6ff">&gt; </tspan>imredkillz<tspan class="cursor" fill="#58a6ff">_</tspan></text>
-  <text x="702" y="35" text-anchor="end" fill="#8b949e" font-size="12" letter-spacing="0.8">dev.</text>
+  <text x="22" y="36" fill="#f8fafc" font-size="16" font-weight="700" letter-spacing="0.3"><tspan fill="#7aa2f7">&gt; </tspan>imredkillz<tspan class="cursor" fill="#7aa2f7">_</tspan></text>
+  <text x="702" y="35" text-anchor="end" fill="#94a3b8" font-size="12" letter-spacing="0.8">dev.</text>
 </svg>
