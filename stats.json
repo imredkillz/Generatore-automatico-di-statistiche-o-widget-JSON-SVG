@@ -5,9 +5,9 @@
       "key": "github",
       "label": "GITHUB",
       "color": "#58a6ff",
-      "value": "3 repos · 1 followers",
+      "value": "3 repository · 1 follower",
       "primary": "3 repos",
-      "secondary": "1 followers · @imredkillz",
+      "secondary": "1 follower · @imredkillz",
       "raw": {
         "repos": 3,
         "followers": 1
@@ -19,7 +19,7 @@
       "color": "#5865f2",
       "value": "@accanito",
       "primary": "@accanito",
-      "secondary": "Scrivimi su Discord",
+      "secondary": "DM on Discord",
       "raw": {
         "username": "@accanito"
       }
@@ -28,9 +28,9 @@
       "key": "focus",
       "label": "NOW",
       "color": "#a371f7",
-      "value": "TypeScript · JavaScript · Web Devel…",
+      "value": "TypeScript · JavaScript · Web Developer",
       "primary": "TypeScript · JavaScript",
-      "secondary": "Web Developer",
+      "secondary": "DM on Help for your Project",
       "raw": {
         "label": "NOW",
         "primary": "TypeScript · JavaScript",
