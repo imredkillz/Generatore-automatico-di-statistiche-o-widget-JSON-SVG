@@ -142,6 +142,44 @@ const sources = [
   }
 ];
 
+function renderHeaderSVG(cfg) {
+  const width = 724;
+  const height = 62;
+  const title = cfg.headerTitle || cfg.github || 'dev';
+  const bio = cfg.headerBio || 'dev.';
+
+  return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-header">
+      <rect width="${width}" height="${height}" rx="12"/>
+    </clipPath>
+    <radialGradient id="glow-header" cx="6%" cy="50%" r="45%">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="border-header" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .cursor { animation: blink 1.1s step-end infinite; }
+  </style>
+  <g clip-path="url(#clip-header)">
+    <rect width="${width}" height="${height}" fill="#0d1117"/>
+    <rect width="${width}" height="${height}" fill="url(#glow-header)"/>
+  </g>
+  <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="11.5" fill="none" stroke="url(#border-header)" stroke-width="1"/>
+  <text x="22" y="36" fill="#e6edf3" font-size="16" font-weight="700" letter-spacing="0.3"><tspan fill="#58a6ff">&gt; </tspan>${esc(title)}<tspan class="cursor" fill="#58a6ff">_</tspan></text>
+  <text x="${width - 22}" y="35" text-anchor="end" fill="#8b949e" font-size="12" letter-spacing="0.8">${esc(bio)}</text>
+</svg>`;
+}
+
 function renderDashboardSVG(title, updated, rows) {
   const width = 480;
   const rowHeight = 36;
@@ -236,6 +274,7 @@ async function main() {
   await Promise.all([
     writeFile('stats.json', JSON.stringify({ updated, items: rows }, null, 2)),
     writeFile('stats.svg', renderDashboardSVG(cfg.title || 'STATS', updated, rows)),
+    writeFile('header.svg', renderHeaderSVG(cfg)),
     ...rows.map((r) => writeFile(`${r.key}.svg`, renderCardSVG(r)))
   ]);
 }
