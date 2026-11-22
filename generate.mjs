@@ -21,11 +21,15 @@ async function getJson(url, headers = {}) {
 
 const sources = [
   async (cfg) => {
-    if (!cfg.github) return null;
+    if (!cfg.github) {
+      console.log('[GITHUB] Saltato: campo "github" vuoto in config.json');
+      return null;
+    }
     const headers = process.env.GITHUB_TOKEN
       ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
       : {};
     const d = await getJson(`https://api.github.com/users/${cfg.github}`, headers);
+    console.log('[GITHUB] OK');
     return {
       key: 'github',
       label: 'GITHUB',
@@ -38,31 +42,66 @@ const sources = [
   },
 
   async (cfg) => {
-    if (!cfg.discordInvite) return null;
-    const d = await getJson(
-      `https://discord.com/api/v10/invites/${cfg.discordInvite}?with_counts=true`
+    if (!cfg.discordUserId) {
+      console.log('[DISCORD] Saltato: campo "discordUserId" vuoto in config.json');
+      return null;
+    }
+    const res = await getJson(
+      `https://api.lanyard.rest/v1/users/${cfg.discordUserId}`
     );
-    const serverName = d.guild?.name || 'Community';
+    const d = res.data;
+    if (!d?.discord_user) {
+      console.log('[DISCORD] Saltato: utente non trovato su Lanyard (sei entrato in discord.gg/lanyard?)');
+      return null;
+    }
+
+    const statusColors = {
+      online: '#23a55a',
+      idle: '#f0b232',
+      dnd: '#f23f43',
+      offline: '#80848e'
+    };
+    const statusLabels = {
+      online: 'Online',
+      idle: 'Inattivo',
+      dnd: 'Non disturbare',
+      offline: 'Offline'
+    };
+
+    const status = d.discord_status || 'offline';
+    const user = d.discord_user;
+    const handle = `@${user.username}`;
+    const displayName = user.global_name || user.username;
+    const activity = d.activities?.find((a) => a.type !== 4);
+
+    console.log('[DISCORD] OK');
     return {
       key: 'discord',
       label: 'DISCORD',
-      color: '#5865f2',
-      value: `${d.approximate_member_count} membri · ${d.approximate_presence_count} online`,
-      primary: `${d.approximate_member_count} membri`,
-      secondary: `${d.approximate_presence_count} online · ${cut(serverName, 18)}`,
+      color: statusColors[status] || '#5865f2',
+      value: `${handle} · ${statusLabels[status]}`,
+      primary: cut(displayName, 22),
+      secondary: activity
+        ? `${statusLabels[status]} · ${cut(activity.name, 18)}`
+        : `${statusLabels[status]} · ${handle}`,
       raw: {
-        server: serverName,
-        members: d.approximate_member_count,
-        online: d.approximate_presence_count
+        username: user.username,
+        displayName,
+        status,
+        activity: activity?.name || null
       }
     };
   },
 
   async (cfg) => {
-    if (!cfg.discogs) return null;
+    if (!cfg.discogs) {
+      console.log('[DISCOGS] Saltato: campo "discogs" vuoto in config.json');
+      return null;
+    }
     const d = await getJson(
       `https://api.discogs.com/users/${cfg.discogs}/collection/folders/0`
     );
+    console.log('[DISCOGS] OK');
     return {
       key: 'discogs',
       label: 'DISCOGS',
@@ -76,12 +115,20 @@ const sources = [
 
   async (cfg) => {
     const key = process.env.STEAM_API_KEY;
-    if (!cfg.steamId || !key) return null;
+    if (!cfg.steamId) {
+      console.log('[STEAM] Saltato: campo "steamId" vuoto in config.json');
+      return null;
+    }
+    if (!key) {
+      console.log('[STEAM] Saltato: manca il Secret STEAM_API_KEY in GitHub');
+      return null;
+    }
     const d = await getJson(
       `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${key}&steamid=${cfg.steamId}&count=1`
     );
     const game = d.response?.games?.[0];
     const hours = game ? (game.playtime_2weeks / 60).toFixed(1) : '0.0';
+    console.log('[STEAM] OK');
     return {
       key: 'steam',
       label: 'STEAM',
@@ -95,7 +142,14 @@ const sources = [
 
   async (cfg) => {
     const key = process.env.LASTFM_API_KEY;
-    if (!cfg.lastfm || !key) return null;
+    if (!cfg.lastfm) {
+      console.log('[MUSIC] Saltato: campo "lastfm" vuoto in config.json');
+      return null;
+    }
+    if (!key) {
+      console.log('[MUSIC] Saltato: manca il Secret LASTFM_API_KEY in GitHub');
+      return null;
+    }
     const d = await getJson(
       `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${cfg.lastfm}&api_key=${key}&format=json&limit=1`
     );
@@ -103,6 +157,7 @@ const sources = [
     const artist = t?.artist?.['#text'] || '';
     const track = t?.name || '';
     const trackText = t ? `${artist} — ${track}` : 'Nessun ascolto';
+    console.log('[MUSIC] OK');
     return {
       key: 'music',
       label: 'MUSIC',
@@ -165,7 +220,7 @@ async function main() {
   const rows = [];
   for (const r of results) {
     if (r.status === 'fulfilled' && r.value) rows.push(r.value);
-    if (r.status === 'rejected') console.warn('Sorgente saltata:', r.reason.message);
+    if (r.status === 'rejected') console.warn('Errore sorgente:', r.reason.message);
   }
 
   const updated = new Date().toISOString().split('T')[0];
@@ -181,4 +236,3 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
-
