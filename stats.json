@@ -12,6 +12,17 @@
         "repos": 3,
         "followers": 1
       }
+    },
+    {
+      "key": "discord",
+      "label": "DISCORD",
+      "color": "#5865f2",
+      "value": "@accanito",
+      "primary": "@accanito",
+      "secondary": "Scrivimi su Discord",
+      "raw": {
+        "username": "@accanito"
+      }
     }
   ]
 }
