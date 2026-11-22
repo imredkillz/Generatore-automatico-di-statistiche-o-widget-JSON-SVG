@@ -1,5 +1,6 @@
 {
   "title": "LIVE STATS",
+  "theme": "tokyo",
   "headerTitle": "imredkillz",
   "headerBio": "dev.",
   "github": "imredkillz",
@@ -8,6 +9,5 @@
   "focusLabel": "NOW",
   "focusPrimary": "TypeScript · JavaScript",
   "focusSecondary": "Web Developer",
-  "discogs": "",
-  "lastfm": "TUO_USERNAME_LASTFM"
+  "lastfm": "Capiaghialberto"
 }
