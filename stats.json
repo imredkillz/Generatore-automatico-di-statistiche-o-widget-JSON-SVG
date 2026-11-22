@@ -39,6 +39,22 @@
         "primary": "TypeScript · JavaScript",
         "secondary": "Web Developer"
       }
+    },
+    {
+      "key": "music",
+      "label": "MUSIC",
+      "color": "#1db954",
+      "meta": "NOW PLAYING",
+      "metaColor": "#1db954",
+      "pulse": true,
+      "value": "Ken Carson — Catastrophe",
+      "primary": "Catastrophe",
+      "secondary": "Ken Carson",
+      "raw": {
+        "artist": "Ken Carson",
+        "track": "Catastrophe",
+        "nowPlaying": true
+      }
     }
   ]
 }
