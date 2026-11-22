@@ -1,11 +1,29 @@
-<svg width="300" height="94" viewBox="0 0 300 94" xmlns="http://www.w3.org/2000/svg">
+<svg width="360" height="100" viewBox="0 0 360 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-github">
+      <rect width="360" height="100" rx="12"/>
+    </clipPath>
+    <radialGradient id="glow-github" cx="10%" cy="12%" r="60%">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="border-github" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
   <style>
     text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   </style>
-  <rect width="300" height="94" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <g clip-path="url(#clip-github)">
+    <rect width="360" height="100" fill="#0d1117"/>
+    <rect width="360" height="100" fill="url(#glow-github)"/>
+  </g>
+  <rect x="0.5" y="0.5" width="359" height="99" rx="11.5" fill="none" stroke="url(#border-github)" stroke-width="1"/>
+  
   <circle cx="22" cy="24" r="3.5" fill="#58a6ff"/>
-  <text x="34" y="28" fill="#8b949e" font-size="10.5" font-weight="600" letter-spacing="1">GITHUB</text>
-  <text x="280" y="28" text-anchor="end" fill="#6e7681" font-size="9.5">2026-11-22</text>
-  <text x="20" y="57" fill="#e6edf3" font-size="16" font-weight="700">3 repos</text>
-  <text x="20" y="77" fill="#8b949e" font-size="11">1 followers · @imredkillz</text>
+  <text x="36" y="28" fill="#8b949e" font-size="10.5" font-weight="600" letter-spacing="1.2">GITHUB</text>
+  <text x="340" y="28" text-anchor="end" fill="#6e7681" font-size="12" font-weight="600" letter-spacing="0">↗</text>
+  <text x="20" y="60" fill="#e6edf3" font-size="16.5" font-weight="700">3 repos</text>
+  <text x="20" y="81" fill="#8b949e" font-size="11.5">1 follower · @imredkillz</text>
 </svg>

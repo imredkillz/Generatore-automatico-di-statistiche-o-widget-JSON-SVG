@@ -5,9 +5,10 @@
       "key": "github",
       "label": "GITHUB",
       "color": "#58a6ff",
-      "value": "3 repos · 1 followers",
+      "meta": "↗",
+      "value": "3 repos · 1 follower",
       "primary": "3 repos",
-      "secondary": "1 followers · @imredkillz",
+      "secondary": "1 follower · @imredkillz",
       "raw": {
         "repos": 3,
         "followers": 1
@@ -17,6 +18,7 @@
       "key": "discord",
       "label": "DISCORD",
       "color": "#5865f2",
+      "meta": "↗",
       "value": "@accanito",
       "primary": "@accanito",
       "secondary": "Scrivimi su Discord",
@@ -28,6 +30,7 @@
       "key": "focus",
       "label": "NOW",
       "color": "#a371f7",
+      "meta": "",
       "value": "TypeScript · JavaScript · Web Devel…",
       "primary": "TypeScript · JavaScript",
       "secondary": "Web Developer",
@@ -41,12 +44,16 @@
       "key": "music",
       "label": "MUSIC",
       "color": "#1db954",
-      "value": "Offset — HEADHUNTER",
-      "primary": "HEADHUNTER",
-      "secondary": "Offset",
+      "meta": "NOW PLAYING",
+      "metaColor": "#1db954",
+      "pulse": true,
+      "value": "Playboi Carti — BACKR00MS (with Tra…",
+      "primary": "BACKR00MS (with Travis Scot…",
+      "secondary": "Playboi Carti",
       "raw": {
-        "artist": "Offset",
-        "track": "HEADHUNTER"
+        "artist": "Playboi Carti",
+        "track": "BACKR00MS (with Travis Scott)",
+        "nowPlaying": true
       }
     }
   ]
