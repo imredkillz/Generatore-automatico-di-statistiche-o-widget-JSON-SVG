@@ -25,6 +25,19 @@
       }
     },
     {
+      "key": "focus",
+      "label": "NOW",
+      "color": "#a371f7",
+      "value": "TypeScript · Javascript · Web Devel…",
+      "primary": "TypeScript · Javascript",
+      "secondary": "Web Developer",
+      "raw": {
+        "label": "NOW",
+        "primary": "TypeScript · Javascript",
+        "secondary": "Web Developer"
+      }
+    },
+    {
       "key": "music",
       "label": "MUSIC",
       "color": "#1db954",
