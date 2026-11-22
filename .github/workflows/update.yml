@@ -3,11 +3,11 @@ name: Update Stats Dashboard
 on:
   schedule:
     - cron: "0 */6 * * *"
-  push:
+push:
     paths:
       - "config.json"
+      - "generate.mjs"
       - ".github/workflows/update.yml"
-  workflow_dispatch:
 
 permissions:
   contents: write
