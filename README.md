@@ -1,13 +1,15 @@
-{
-  "title": "LIVE STATS",
-  "theme": "tokyo",
-  "headerTitle": "imredkillz",
-  "headerBio": "dev.",
-  "github": "imredkillz",
-  "discordUsername": "accanito",
-  "discordNote": "DM on Discord",
-  "focusLabel": "NOW",
-  "focusPrimary": "TypeScript · JavaScript",
-  "focusSecondary": "Web Developer",
-  "lastfm": "Capiaghialberto"
-}
+<div align="center">
+
+<p>
+  <img src="./header.svg" alt="imredkillz" width="724" />
+  <br />
+  <a href="https://github.com/imredkillz"><img src="./github.svg" alt="GitHub" width="360" /></a>
+  <a href="https://discord.com/users/1056898661365317645"><img src="./discord.svg" alt="Discord" width="360" /></a>
+  <br />
+  <img src="./focus.svg" alt="Focus" width="360" />
+  <a href="https://www.last.fm/user/TUO_USERNAME_LASTFM"><img src="./music.svg" alt="Music" width="360" /></a>
+  <br />
+  <img src="./footer.svg" alt="Auto-updated via GitHub Actions" width="724" />
+</p>
+
+</div>
