@@ -21,24 +21,9 @@ async function getJson(url, headers = {}) {
 
 const sources = [
   async (cfg) => {
-    if (!cfg.discordUsername) {
-      console.log('[DISCORD] Saltato: campo "discordUsername" vuoto in config.json');
+    if (!cfg.github) {
+      console.log('[GITHUB] Saltato: campo "github" vuoto in config.json');
       return null;
-    }
-    const handle = cfg.discordUsername.startsWith('@')
-      ? cfg.discordUsername
-      : `@${cfg.discordUsername}`;
-    console.log('[DISCORD] OK');
-    return {
-      key: 'discord',
-      label: 'DISCORD',
-      color: '#5865f2',
-      value: handle,
-      primary: cut(handle, 22),
-      secondary: cfg.discordNote || 'Profilo Discord',
-      raw: { username: handle }
-    };
-  },
     }
     const headers = process.env.GITHUB_TOKEN
       ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
@@ -57,54 +42,22 @@ const sources = [
   },
 
   async (cfg) => {
-    if (!cfg.discordUserId) {
-      console.log('[DISCORD] Saltato: campo "discordUserId" vuoto in config.json');
+    if (!cfg.discordUsername) {
+      console.log('[DISCORD] Saltato: campo "discordUsername" vuoto in config.json');
       return null;
     }
-    const res = await getJson(
-      `https://api.lanyard.rest/v1/users/${cfg.discordUserId}`
-    );
-    const d = res.data;
-    if (!d?.discord_user) {
-      console.log('[DISCORD] Saltato: utente non trovato su Lanyard (sei entrato in discord.gg/lanyard?)');
-      return null;
-    }
-
-    const statusColors = {
-      online: '#23a55a',
-      idle: '#f0b232',
-      dnd: '#f23f43',
-      offline: '#80848e'
-    };
-    const statusLabels = {
-      online: 'Online',
-      idle: 'Inattivo',
-      dnd: 'Non disturbare',
-      offline: 'Offline'
-    };
-
-    const status = d.discord_status || 'offline';
-    const user = d.discord_user;
-    const handle = `@${user.username}`;
-    const displayName = user.global_name || user.username;
-    const activity = d.activities?.find((a) => a.type !== 4);
-
+    const handle = cfg.discordUsername.startsWith('@')
+      ? cfg.discordUsername
+      : `@${cfg.discordUsername}`;
     console.log('[DISCORD] OK');
     return {
       key: 'discord',
       label: 'DISCORD',
-      color: statusColors[status] || '#5865f2',
-      value: `${handle} · ${statusLabels[status]}`,
-      primary: cut(displayName, 22),
-      secondary: activity
-        ? `${statusLabels[status]} · ${cut(activity.name, 18)}`
-        : `${statusLabels[status]} · ${handle}`,
-      raw: {
-        username: user.username,
-        displayName,
-        status,
-        activity: activity?.name || null
-      }
+      color: '#5865f2',
+      value: handle,
+      primary: cut(handle, 22),
+      secondary: cfg.discordNote || 'Profilo Discord',
+      raw: { username: handle }
     };
   },
 
