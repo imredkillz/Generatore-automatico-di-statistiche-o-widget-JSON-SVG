@@ -5,9 +5,9 @@
       "key": "github",
       "label": "GITHUB",
       "color": "#58a6ff",
-      "value": "3 repository · 1 follower",
+      "value": "3 repos · 1 followers",
       "primary": "3 repos",
-      "secondary": "1 follower · @imredkillz",
+      "secondary": "1 followers · @imredkillz",
       "raw": {
         "repos": 3,
         "followers": 1
@@ -19,7 +19,7 @@
       "color": "#5865f2",
       "value": "@accanito",
       "primary": "@accanito",
-      "secondary": "DM on Discord",
+      "secondary": "Scrivimi su Discord",
       "raw": {
         "username": "@accanito"
       }
@@ -28,9 +28,9 @@
       "key": "focus",
       "label": "NOW",
       "color": "#a371f7",
-      "value": "TypeScript · JavaScript · Web Developer",
+      "value": "TypeScript · JavaScript · Web Devel…",
       "primary": "TypeScript · JavaScript",
-      "secondary": "DM on Help for your Project",
+      "secondary": "Web Developer",
       "raw": {
         "label": "NOW",
         "primary": "TypeScript · JavaScript",
@@ -41,12 +41,12 @@
       "key": "music",
       "label": "MUSIC",
       "color": "#1db954",
-      "value": "Ken Carson — Blakk Rokkstar",
-      "primary": "Blakk Rokkstar",
-      "secondary": "Ken Carson",
+      "value": "Offset — HEADHUNTER",
+      "primary": "HEADHUNTER",
+      "secondary": "Offset",
       "raw": {
-        "artist": "Ken Carson",
-        "track": "Blakk Rokkstar"
+        "artist": "Offset",
+        "track": "HEADHUNTER"
       }
     }
   ]
