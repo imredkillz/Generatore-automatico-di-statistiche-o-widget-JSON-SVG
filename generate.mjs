@@ -21,9 +21,24 @@ async function getJson(url, headers = {}) {
 
 const sources = [
   async (cfg) => {
-    if (!cfg.github) {
-      console.log('[GITHUB] Saltato: campo "github" vuoto in config.json');
+    if (!cfg.discordUsername) {
+      console.log('[DISCORD] Saltato: campo "discordUsername" vuoto in config.json');
       return null;
+    }
+    const handle = cfg.discordUsername.startsWith('@')
+      ? cfg.discordUsername
+      : `@${cfg.discordUsername}`;
+    console.log('[DISCORD] OK');
+    return {
+      key: 'discord',
+      label: 'DISCORD',
+      color: '#5865f2',
+      value: handle,
+      primary: cut(handle, 22),
+      secondary: cfg.discordNote || 'Profilo Discord',
+      raw: { username: handle }
+    };
+  },
     }
     const headers = process.env.GITHUB_TOKEN
       ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
