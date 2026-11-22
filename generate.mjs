@@ -6,7 +6,7 @@ const esc = (s) => String(s ?? '')
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
 
-const cut = (s, max = 34) => {
+const cut = (s, max = 40) => {
   const str = String(s ?? '');
   return str.length > max ? `${str.slice(0, max - 1)}…` : str;
 };
@@ -29,14 +29,17 @@ const sources = [
       ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
       : {};
     const d = await getJson(`https://api.github.com/users/${cfg.github}`, headers);
+    const repoLabel = d.public_repos === 1 ? 'repo' : 'repos';
+    const followerLabel = d.followers === 1 ? 'follower' : 'followers';
     console.log('[GITHUB] OK');
     return {
       key: 'github',
       label: 'GITHUB',
       color: '#58a6ff',
-      value: `${d.public_repos} repos · ${d.followers} followers`,
-      primary: `${d.public_repos} repos`,
-      secondary: `${d.followers} followers · @${cfg.github}`,
+      meta: '↗',
+      value: `${d.public_repos} ${repoLabel} · ${d.followers} ${followerLabel}`,
+      primary: `${d.public_repos} ${repoLabel}`,
+      secondary: `${d.followers} ${followerLabel} · @${cfg.github}`,
       raw: { repos: d.public_repos, followers: d.followers }
     };
   },
@@ -54,9 +57,10 @@ const sources = [
       key: 'discord',
       label: 'DISCORD',
       color: '#5865f2',
+      meta: '↗',
       value: handle,
-      primary: cut(handle, 22),
-      secondary: cfg.discordNote || 'Profilo Discord',
+      primary: cut(handle, 28),
+      secondary: cut(cfg.discordNote || 'DM on Discord', 42),
       raw: { username: handle }
     };
   },
@@ -68,15 +72,16 @@ const sources = [
     }
     const label = (cfg.focusLabel || 'FOCUS').toUpperCase();
     const primary = cfg.focusPrimary;
-    const secondary = cfg.focusSecondary || 'Stack & focus attuale';
+    const secondary = cfg.focusSecondary || 'Stack & current focus';
     console.log('[FOCUS] OK');
     return {
       key: 'focus',
       label,
       color: '#a371f7',
+      meta: '',
       value: cut(cfg.focusSecondary ? `${primary} · ${cfg.focusSecondary}` : primary, 36),
-      primary: cut(primary, 23),
-      secondary: cut(secondary, 34),
+      primary: cut(primary, 28),
+      secondary: cut(secondary, 42),
       raw: { label, primary, secondary }
     };
   },
@@ -89,14 +94,16 @@ const sources = [
     const d = await getJson(
       `https://api.discogs.com/users/${cfg.discogs}/collection/folders/0`
     );
+    const recordLabel = d.count === 1 ? 'record' : 'records';
     console.log('[DISCOGS] OK');
     return {
       key: 'discogs',
       label: 'DISCOGS',
       color: '#f59e0b',
-      value: `${d.count} dischi in collezione`,
-      primary: `${d.count} dischi`,
-      secondary: `collezione · @${cfg.discogs}`,
+      meta: '↗',
+      value: `${d.count} ${recordLabel} in collection`,
+      primary: `${d.count} ${recordLabel}`,
+      secondary: `collection · @${cfg.discogs}`,
       raw: { count: d.count }
     };
   },
@@ -115,18 +122,22 @@ const sources = [
       `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${cfg.lastfm}&api_key=${key}&format=json&limit=1`
     );
     const t = d.recenttracks?.track?.[0];
+    const isPlaying = t?.['@attr']?.nowplaying === 'true';
     const artist = t?.artist?.['#text'] || '';
     const track = t?.name || '';
-    const trackText = t ? `${artist} — ${track}` : 'Nessun ascolto';
+    const trackText = t ? `${artist} — ${track}` : 'No recent tracks';
     console.log('[MUSIC] OK');
     return {
       key: 'music',
       label: 'MUSIC',
       color: '#1db954',
+      meta: t ? (isPlaying ? 'NOW PLAYING' : 'RECENT') : '',
+      metaColor: isPlaying ? '#1db954' : '#6e7681',
+      pulse: Boolean(t),
       value: cut(trackText, 36),
-      primary: t ? cut(track, 23) : 'Nessun ascolto',
-      secondary: t ? cut(artist, 34) : 'In attesa di nuovi brani',
-      raw: t ? { artist, track } : null
+      primary: t ? cut(track, 28) : 'No recent tracks',
+      secondary: t ? cut(artist, 42) : 'Waiting for scrobbles',
+      raw: t ? { artist, track, nowPlaying: isPlaying } : null
     };
   }
 ];
@@ -149,7 +160,7 @@ function renderDashboardSVG(title, updated, rows) {
   <style>
     text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   </style>
-  <rect width="${width}" height="${height}" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <rect width="${width}" height="${height}" rx="12" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
   <text x="20" y="31" fill="#e6edf3" font-size="13" font-weight="700" letter-spacing="0.5">${esc(title)}</text>
   <text x="${width - 20}" y="31" text-anchor="end" fill="#6e7681" font-size="10">${esc(updated)}</text>
   <line x1="20" y1="45" x2="${width - 20}" y2="45" stroke="#21262d" stroke-width="1"/>
@@ -157,20 +168,56 @@ function renderDashboardSVG(title, updated, rows) {
 </svg>`;
 }
 
-function renderCardSVG(item, updated) {
-  const width = 300;
-  const height = 94;
+function renderCardSVG(item) {
+  const width = 360;
+  const height = 100;
+  const isArrow = item.meta === '↗';
+
+  const pulseCss = item.pulse
+    ? `
+    @keyframes pulse {
+      0%, 100% { opacity: 0.12; }
+      50% { opacity: 0.42; }
+    }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }`
+    : '';
+
+  const pulseRing = item.pulse
+    ? `<circle cx="22" cy="24" r="7.5" fill="${item.color}" class="pulse"/>`
+    : '';
+
+  const metaEl = item.meta
+    ? `<text x="${width - 20}" y="28" text-anchor="end" fill="${item.metaColor || '#6e7681'}" font-size="${isArrow ? '12' : '9.5'}" font-weight="600" letter-spacing="${isArrow ? '0' : '0.8'}">${esc(item.meta)}</text>`
+    : '';
 
   return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip-${item.key}">
+      <rect width="${width}" height="${height}" rx="12"/>
+    </clipPath>
+    <radialGradient id="glow-${item.key}" cx="10%" cy="12%" r="60%">
+      <stop offset="0%" stop-color="${item.color}" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="${item.color}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="border-${item.key}" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#30363d" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#21262d" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
   <style>
-    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }${pulseCss}
   </style>
-  <rect width="${width}" height="${height}" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="1"/>
+  <g clip-path="url(#clip-${item.key})">
+    <rect width="${width}" height="${height}" fill="#0d1117"/>
+    <rect width="${width}" height="${height}" fill="url(#glow-${item.key})"/>
+  </g>
+  <rect x="0.5" y="0.5" width="${width - 1}" height="${height - 1}" rx="11.5" fill="none" stroke="url(#border-${item.key})" stroke-width="1"/>
+  ${pulseRing}
   <circle cx="22" cy="24" r="3.5" fill="${item.color}"/>
-  <text x="34" y="28" fill="#8b949e" font-size="10.5" font-weight="600" letter-spacing="1">${esc(item.label)}</text>
-  <text x="${width - 20}" y="28" text-anchor="end" fill="#6e7681" font-size="9.5">${esc(updated)}</text>
-  <text x="20" y="57" fill="#e6edf3" font-size="16" font-weight="700">${esc(item.primary)}</text>
-  <text x="20" y="77" fill="#8b949e" font-size="11">${esc(item.secondary)}</text>
+  <text x="36" y="28" fill="#8b949e" font-size="10.5" font-weight="600" letter-spacing="1.2">${esc(item.label)}</text>
+  ${metaEl}
+  <text x="20" y="60" fill="#e6edf3" font-size="16.5" font-weight="700">${esc(item.primary)}</text>
+  <text x="20" y="81" fill="#8b949e" font-size="11.5">${esc(item.secondary)}</text>
 </svg>`;
 }
 
@@ -189,7 +236,7 @@ async function main() {
   await Promise.all([
     writeFile('stats.json', JSON.stringify({ updated, items: rows }, null, 2)),
     writeFile('stats.svg', renderDashboardSVG(cfg.title || 'STATS', updated, rows)),
-    ...rows.map((r) => writeFile(`${r.key}.svg`, renderCardSVG(r, updated)))
+    ...rows.map((r) => writeFile(`${r.key}.svg`, renderCardSVG(r)))
   ]);
 }
 
