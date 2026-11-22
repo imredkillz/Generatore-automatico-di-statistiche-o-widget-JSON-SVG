@@ -44,16 +44,16 @@
       "key": "music",
       "label": "MUSIC",
       "color": "#9ece6a",
-      "meta": "NOW PLAYING",
-      "metaColor": "#9ece6a",
+      "meta": "RECENT",
+      "metaColor": "#6e7681",
       "pulse": true,
-      "value": "21 Savage — WHERE YOU FROM",
-      "primary": "WHERE YOU FROM",
-      "secondary": "21 Savage",
+      "value": "Hako — MONEY",
+      "primary": "MONEY",
+      "secondary": "Hako",
       "raw": {
-        "artist": "21 Savage",
-        "track": "WHERE YOU FROM",
-        "nowPlaying": true
+        "artist": "Hako",
+        "track": "MONEY",
+        "nowPlaying": false
       }
     }
   ]
