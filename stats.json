@@ -4,7 +4,7 @@
     {
       "key": "github",
       "label": "GITHUB",
-      "color": "#0d1117",
+      "color": "#58a6ff",
       "value": "3 repos · 1 followers",
       "primary": "3 repos",
       "secondary": "1 followers · @imredkillz",
@@ -16,7 +16,7 @@
     {
       "key": "discord",
       "label": "DISCORD",
-      "color": "#0d1117",
+      "color": "#5865f2",
       "value": "@accanito",
       "primary": "@accanito",
       "secondary": "Scrivimi su Discord",
@@ -26,8 +26,8 @@
     },
     {
       "key": "focus",
-      "label": "STACK",
-      "color": "#0d1117",
+      "label": "NOW",
+      "color": "#a371f7",
       "value": "TypeScript · JavaScript · Web Devel…",
       "primary": "TypeScript · JavaScript",
       "secondary": "Web Developer",
@@ -39,14 +39,14 @@
     },
     {
       "key": "music",
-      "label": "LIVE",
-      "color": "#0d1117",
-      "value": "Travis Scott — WHERE WAS YOU",
-      "primary": "WHERE WAS YOU",
-      "secondary": "Travis Scott",
+      "label": "MUSIC",
+      "color": "#1db954",
+      "value": "Ken Carson — Blakk Rokkstar",
+      "primary": "Blakk Rokkstar",
+      "secondary": "Ken Carson",
       "raw": {
-        "artist": "Travis Scott",
-        "track": "WHERE WAS YOU"
+        "artist": "Ken Carson",
+        "track": "Blakk Rokkstar"
       }
     }
   ]
