@@ -21,7 +21,7 @@
       "meta": "↗",
       "value": "@accanito",
       "primary": "@accanito",
-      "secondary": "Scrivimi su Discord",
+      "secondary": "DM on Discord",
       "raw": {
         "username": "@accanito"
       }
@@ -38,22 +38,6 @@
         "label": "NOW",
         "primary": "TypeScript · JavaScript",
         "secondary": "Web Developer"
-      }
-    },
-    {
-      "key": "music",
-      "label": "MUSIC",
-      "color": "#1db954",
-      "meta": "NOW PLAYING",
-      "metaColor": "#1db954",
-      "pulse": true,
-      "value": "Playboi Carti — BACKR00MS (with Tra…",
-      "primary": "BACKR00MS (with Travis Scot…",
-      "secondary": "Playboi Carti",
-      "raw": {
-        "artist": "Playboi Carti",
-        "track": "BACKR00MS (with Travis Scott)",
-        "nowPlaying": true
       }
     }
   ]
