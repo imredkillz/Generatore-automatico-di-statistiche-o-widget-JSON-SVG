@@ -39,6 +39,22 @@
         "primary": "TypeScript · JavaScript",
         "secondary": "Web Developer"
       }
+    },
+    {
+      "key": "music",
+      "label": "MUSIC",
+      "color": "#9ece6a",
+      "meta": "RECENT",
+      "metaColor": "#6e7681",
+      "pulse": true,
+      "value": "Hako — MONEY",
+      "primary": "MONEY",
+      "secondary": "Hako",
+      "raw": {
+        "artist": "Hako",
+        "track": "MONEY",
+        "nowPlaying": false
+      }
     }
   ]
 }
