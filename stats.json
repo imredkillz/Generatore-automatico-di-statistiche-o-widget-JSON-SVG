@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "items": [
     {
       "key": "github",
@@ -38,22 +38,6 @@
         "label": "NOW",
         "primary": "TypeScript · JavaScript",
         "secondary": "Web Developer"
-      }
-    },
-    {
-      "key": "music",
-      "label": "MUSIC",
-      "color": "#9ece6a",
-      "meta": "RECENT",
-      "metaColor": "#6e7681",
-      "pulse": true,
-      "value": "Hako — MONEY",
-      "primary": "MONEY",
-      "secondary": "Hako",
-      "raw": {
-        "artist": "Hako",
-        "track": "MONEY",
-        "nowPlaying": false
       }
     }
   ]
